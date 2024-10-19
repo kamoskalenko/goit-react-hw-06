@@ -1,14 +1,15 @@
 import Contact from "../Contact/Contact";
+import ContactForm from "../ContactForm/ContactForm";
+import SearchBox from "../SearchBox/SearchBox";
 
-const ContactList = ({ contacts, onDelete }) => {
+const ContactList = () => {
   return (
-    <ul className="contact-list">
-      {contacts.map((contact) => (
-        <li key={contact.id} className="contact-item">
-          <Contact data={contact} onDelete={onDelete} />
-        </li>
-      ))}
-    </ul>
+    <div className="container">
+      <h1>Phonebook</h1>
+      <ContactForm />
+      <SearchBox />
+      <Contact />
+    </div>
   );
 };
 

@@ -1,9 +1,8 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import { nanoid } from "nanoid";
-import { useId } from "react";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-
-const initialValues = { name: "", phone: "" };
+import { addContact } from "../../redux/contactsSlice";
 
 const validationSchema = Yup.object().shape({
   name: Yup.string()
@@ -20,18 +19,20 @@ const validationSchema = Yup.object().shape({
     .required("Required"),
 });
 
-const ContactForm = ({ onAdd }) => {
-  const nameField = useId();
-  const phoneField = useId();
-  const handleSubmit = (values, actions) => {
+const ContactForm = () => {
+  const initialValues = { name: "", phone: "" };
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values, options) => {
     const newContact = {
       id: nanoid(),
       name: values.name,
-      number: values.phone,
+      phone: values.phone,
     };
 
-    onAdd(newContact);
-    actions.resetForm();
+    dispatch(addContact(newContact));
+    options.resetForm();
   };
 
   return (
@@ -42,19 +43,14 @@ const ContactForm = ({ onAdd }) => {
     >
       <Form className="contact-form">
         <div>
-          <label htmlFor={nameField}>Name</label>
-          <Field
-            name="name"
-            type="text"
-            className="input-field"
-            id={nameField}
-          />
+          <label htmlFor="name">Name</label>
+          <Field name="name" type="text" className="input-field" id="name" />
           <ErrorMessage name="name" component="p" />
         </div>
 
         <div>
-          <label htmlFor={phoneField}>Phone</label>
-          <Field name="phone" type="tel" id={phoneField} />
+          <label htmlFor="phone">Phone</label>
+          <Field name="phone" type="tel" id="phone" />
           <ErrorMessage name="phone" component="p" />
         </div>
 
@@ -67,28 +63,3 @@ const ContactForm = ({ onAdd }) => {
 };
 
 export default ContactForm;
-
-// const ContactForm = ({ onAdd }) => {
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     const newContact = {
-//       id: Date.now(),
-//       name: e.target.elements.name.value,
-//       number: e.target.elements.phone.value,
-//     };
-
-//     onAdd(newContact);
-//     e.target.reset();
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input type="text" name="name" />
-//       <input type="tel" name="phone" />
-//       <button type="submit">Add contact</button>
-//     </form>
-//   );
-// };
-
-// export default ContactForm;
